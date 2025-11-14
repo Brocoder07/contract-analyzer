@@ -1,0 +1,134 @@
+# =========================
+# Git Ignore for Contract Analyzer
+# Backend: FastAPI (Python)
+# Frontend: Vite + React + TypeScript
+# AI Models: Local HuggingFace caches & large weights
+# =========================
+
+# --- Python build & cache ---
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.eggs/
+*.pyo
+*.pyd
+*.orig
+*.rej
+
+# Packaging / build artifacts
+build/
+dist/
+*.egg
+*.wheel
+
+# Test / coverage artifacts
+.coverage*
+coverage/
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.pyre/
+.pytype/
+.cache/
+
+# Virtual environments
+venv/
+.env/
+.venv/
+ENV/
+env/
+
+# Local environment & secrets
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.crt
+
+# SQLite or other lightweight local dbs (uncomment if used)
+# *.sqlite3
+# *.db
+
+# --- Node / Frontend ---
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Frontend tooling caches
+frontend/.eslintcache
+
+# Logs
+logs/
+*.log
+backend/*.log
+frontend/*.log
+
+# IDE / Editor config (keep shared workspace settings if desired)
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# OS / Misc
+.DS_Store
+Thumbs.db
+
+# --- Model & AI artifacts ---
+# Ignore large model weight files & HF download caches
+*.safetensors
+*.bin
+*.pt
+
+# If you intentionally version minimal model metadata, whitelist needed files below
+# Example (already committed):
+!backend/app/data/models/bert_contracts/config.json
+!backend/app/data/models/bert_contracts/tokenizer_config.json
+!backend/app/data/models/bert_contracts/tokenizer.json
+!backend/app/data/models/bert_contracts/vocab.txt
+!backend/app/data/models/bert_contracts/special_tokens_map.json
+!backend/app/data/models/bert_contracts/model_info.txt
+
+# DeBERTa tokenizer metadata (keep if required for reproducibility)
+!backend/app/data/models/deberta_large_mnli/tokenizer_config.json
+!backend/app/data/models/deberta_large_mnli/tokenizer.json
+!backend/app/data/models/deberta_large_mnli/vocab.json
+!backend/app/data/models/deberta_large_mnli/merges.txt
+!backend/app/data/models/deberta_large_mnli/special_tokens_map.json
+
+# Remove this ignore to track full weights:
+# !backend/app/data/models/bert_contracts/model.safetensors
+
+# --- Generated artifacts / benchmarks ---
+benchmark_results/
+profiling/
+
+# Temp & scratch
+tmp/
+.temp/
+*.tmp
+
+# Security: never commit raw secrets
+secrets/
+
+# Optional: Uncomment if using Poetry
+# poetry.lock
+# .venv/
+
+# Optional: Uncomment if using pip-tools
+# requirements*.txt
+# requirements/  
+
+# Allow README / docs everywhere
+!README.md
+
+# End of .gitignore

@@ -9,11 +9,12 @@ class HybridRiskAnalyzer:
     Hybrid risk analyzer combining rule-based and ML approaches with spaCy
     """
     
-    def __init__(self, rule_config_path: str, ml_model_path: str):
+    def __init__(self, rule_config_path: str, ml_model_path: str, model_choice: str = "contracts_bert"):
         self.rule_config_path = rule_config_path
         self.ml_model_path = ml_model_path
+        self.model_choice = model_choice
         self.rule_engine = RuleEngine(rule_config_path)
-        self.ml_model = MLModel(ml_model_path)
+        self.ml_model = MLModel(ml_model_path, model_choice)
         self._models_loaded = False
         
     def load_models(self):

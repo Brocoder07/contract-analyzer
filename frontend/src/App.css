@@ -1,0 +1,168 @@
+/* App layout styles */
+.app-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+/* Header styles */
+.header {
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-title h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.header-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.header-button:hover {
+  background-color: #f9fafb;
+}
+
+/* Main content */
+.main-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+/* Upload section */
+.upload-section {
+  text-align: center;
+}
+
+.upload-hero {
+  margin-bottom: 32px;
+}
+
+.upload-hero h2 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.upload-hero p {
+  font-size: 18px;
+  color: #6b7280;
+  max-width: 512px;
+  margin: 0 auto;
+}
+
+/* Analysis layout */
+.analysis-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+@media (max-width: 1024px) {
+  .analysis-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.analysis-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Utility classes */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  text-align: center;
+}
+
+.loading-state h3 {
+  font-size: 18px;
+  font-weight: 500;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.loading-state p {
+  color: #6b7280;
+}
+
+.error-state {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.error-state h3 {
+  font-weight: 500;
+  color: #991b1b;
+  margin-bottom: 4px;
+}
+
+.error-state p {
+  color: #dc2626;
+  margin-bottom: 12px;
+}
+
+.retry-button {
+  padding: 8px 16px;
+  background-color: #dc2626;
+  color: white;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.retry-button:hover {
+  background-color: #b91c1c;
+}

@@ -1,0 +1,168 @@
+{
+  "risk_patterns": [
+    {
+      "name": "exploitative_auto_renewal",
+      "description": "Auto-renewal clauses with unreasonably short notice periods",
+      "risk_type": "auto_renewal",
+      "risk_level": "high",
+      "patterns": [
+        {
+          "text": "auto.{0,10}renew.*\\b(1|one|2|two|3|three)\\s*days?\\b",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.9,
+          "description": "Auto-renewal with 1-3 day notice period (highly exploitative)"
+        },
+        {
+          "text": "automatic.{0,20}renewal.*\\b(1|one|2|two|3|three|4|four|5|five|6|six|7|seven)\\s*days?\\b",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.8,
+          "description": "Automatic renewal with very short notice (exploitative)"
+        },
+        {
+          "text": "(renew|renewal).*\\b(24|forty.eight)\\s*hours?\\b",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.95,
+          "description": "Renewal with 24-48 hour notice (extremely exploitative)"
+        }
+      ]
+    },
+    {
+      "name": "exploitative_liability_caps",
+      "description": "Unreasonably low liability limitation amounts",
+      "risk_type": "liability",
+      "risk_level": "high",
+      "patterns": [
+        {
+          "text": "liability.*limit.*\\$?\\b(100|200|300|400|500|1000|one.hundred|two.hundred|five.hundred|one.thousand)\\b",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.9,
+          "description": "Extremely low liability cap ($100-$1000) - highly exploitative"
+        },
+        {
+          "text": "maximum.*liability.*\\$?\\b(100|200|300|400|500|1000)\\b",
+          "flags": ["IGNORECASE", "DOTALL"], 
+          "weight": 0.85,
+          "description": "Very low maximum liability limit"
+        },
+        {
+          "text": "liability.*not.*exceed.*\\$?\\b(100|200|300|400|500|1000)\\b",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.9,
+          "description": "Liability cap under $1000 (exploitative)"
+        }
+      ]
+    },
+    {
+      "name": "exploitative_ip_ownership", 
+      "description": "One-sided intellectual property ownership clauses",
+      "risk_type": "ip_ownership",
+      "risk_level": "high",
+      "patterns": [
+        {
+          "text": "(intellectual.property|ip).{0,50}(belong|ownership).{0,20}exclusively.{0,20}(company|employer|client)",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.95,
+          "description": "All IP belongs exclusively to one party (highly exploitative)"
+        },
+        {
+          "text": "all.{0,20}(work.product|inventions|creations).{0,50}belong.{0,20}(exclusively|solely).{0,20}(company|employer)",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.9,
+          "description": "Exclusive ownership of all work product"
+        },
+        {
+          "text": "(developed|created).{0,50}(shall|will).{0,20}become.{0,20}(exclusive|sole).{0,20}property.{0,20}(company|employer)",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.88,
+          "description": "Work becomes exclusive property of company"
+        }
+      ]
+    },
+    {
+      "name": "exploitative_termination",
+      "description": "Unfair termination clauses with short notice periods",
+      "risk_type": "termination", 
+      "risk_level": "medium",
+      "patterns": [
+        {
+          "text": "terminate.*\\b(1|one|2|two|3|three|4|four|5|five|6|six|7|seven)\\s*days?.*\\b(notice|written.notice)\\b",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.8,
+          "description": "Very short termination notice (1-7 days) - potentially exploitative"
+        },
+        {
+          "text": "terminate.{0,20}(immediate|immediately).{0,20}(any.reason|no.reason)",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.75,
+          "description": "Immediate termination for any/no reason"
+        },
+        {
+          "text": "(either.party|company).*may.*terminate.*\\b(24|twenty.four)\\s*hours?\\b",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.9,
+          "description": "24-hour termination notice (exploitative)"
+        }
+      ]
+    },
+    {
+      "name": "exploitative_indemnification",
+      "description": "One-sided indemnification clauses",
+      "risk_type": "indemnification",
+      "risk_level": "high",
+      "patterns": [
+        {
+          "text": "(contractor|employee|party).{0,50}(shall|will|must).{0,20}indemnify.{0,50}(company|client).{0,50}all.{0,20}(claims|damages|losses)",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.85,
+          "description": "One-sided indemnification - party must cover all company losses"
+        },
+        {
+          "text": "(hold.harmless|defend).{0,50}(company|client).{0,50}(any|all).{0,20}(liability|claims|damages)",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.8,
+          "description": "Broad hold harmless clause favoring company"
+        }
+      ]
+    },
+    {
+      "name": "exploitative_confidentiality",
+      "description": "Overly broad or one-sided confidentiality clauses", 
+      "risk_type": "confidentiality",
+      "risk_level": "medium",
+      "patterns": [
+        {
+          "text": "confidentiality.{0,100}(perpetual|permanent|indefinite|forever)",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.8,
+          "description": "Perpetual confidentiality requirements (excessive)"
+        },
+        {
+          "text": "(any|all).{0,20}information.{0,50}confidential.{0,50}(perpetual|indefinite)",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.75,
+          "description": "All information deemed confidential indefinitely"
+        }
+      ]
+    },
+    {
+      "name": "exploitative_payment_terms",
+      "description": "Unfair payment and penalty clauses",
+      "risk_type": "liability",
+      "risk_level": "medium", 
+      "patterns": [
+        {
+          "text": "(late.fee|penalty).{0,50}(50|100|200)%.{0,20}(amount|payment)",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.85,
+          "description": "Excessive late payment penalties (50%+ of amount)"
+        },
+        {
+          "text": "payment.{0,50}(net.90|90.days|ninety.days)",
+          "flags": ["IGNORECASE", "DOTALL"],
+          "weight": 0.6,
+          "description": "Extended payment terms (90+ days)"
+        }
+      ]
+    }
+  ]
+}

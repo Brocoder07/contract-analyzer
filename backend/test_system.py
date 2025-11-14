@@ -6,6 +6,7 @@ sys.path.append(os.path.dirname(__file__))
 
 from app.services.document_processor import DocumentProcessor
 from app.services.ai.risk_analyzer import HybridRiskAnalyzer
+from app.core.config import settings
 
 def test_system():
     print("🧪 Testing Contract Risk Analyzer System...")
@@ -16,7 +17,7 @@ def test_system():
         print("✅ Document Processor loaded")
         
         # Test risk analyzer
-        analyzer = HybridRiskAnalyzer("./app/services/ai/rules.json", "./app/data/models/production")
+        analyzer = HybridRiskAnalyzer("./app/services/ai/rules.json", "./app/data/models/production", settings.ML_MODEL_CHOICE)
         print("✅ Risk Analyzer loaded")
         
         # Test with sample contract text

@@ -5,7 +5,7 @@ from app.core.config import settings
 from app.models.schemas import AnalysisResponse
 
 router = APIRouter()
-analyzer = HybridRiskAnalyzer(settings.RULE_CONFIG_PATH, settings.ML_MODEL_PATH)
+analyzer = HybridRiskAnalyzer(settings.RULE_CONFIG_PATH, settings.ML_MODEL_PATH, settings.ML_MODEL_CHOICE)
 doc_processor = DocumentProcessor()
 
 @router.post("/analyze", response_model=AnalysisResponse)

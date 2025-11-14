@@ -1,0 +1,4 @@
+Model: nlpaueb/bert-base-uncased-contracts
+Type: BERT base model for contracts
+Usage: Feature extraction + rule-based classification
+Downloaded: Local cache
