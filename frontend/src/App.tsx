@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { FileUpload } from './components/FileUpload';
 import { PDFViewer } from './components/PDFViewer';
 import { AnalysisResults } from './components/AnalysisResults';
+import { EditModal } from './components/EditModal';
 import { contractAnalysisAPI } from './services/api';
-import type { UploadState } from './types';
-import { FileText, BarChart3 } from 'lucide-react';
+import type { UploadState, StagedEdit } from './types';
+import { FileText, BarChart3, Edit3 } from 'lucide-react';
 import './App.css';
 
 function App() {
@@ -15,6 +16,13 @@ function App() {
     analysis: null,
   });
 
+  // Editing state
+  const [originalText, setOriginalText] = useState<string>('');
+  const [stagedEdits, setStagedEdits] = useState<StagedEdit[]>([]);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [modifiedText, setModifiedText] = useState<string | null>(null);
+
+  // Reset all editing state when a new file is selected
   const handleFileSelect = async (file: File) => {
     setUploadState({
       isUploading: true,
@@ -22,9 +30,16 @@ function App() {
       file,
       analysis: null,
     });
+    setStagedEdits([]);
+    setModifiedText(null);
+
+    // Reset any previously extracted text
+    setOriginalText('');
 
     try {
       const analysis = await contractAnalysisAPI.analyzeContract(file);
+      // Use the server-extracted text (works for PDF, DOCX, and TXT)
+      setOriginalText(analysis.extracted_text ?? '');
       setUploadState({
         isUploading: false,
         error: null,
@@ -48,6 +63,19 @@ function App() {
       file: null,
       analysis: null,
     });
+    setStagedEdits([]);
+    setOriginalText('');
+    setModifiedText(null);
+    setShowEditModal(false);
+  };
+
+  const handleStageEdit = (edit: StagedEdit) => {
+    setStagedEdits((prev) => {
+      // Replace if same risk was already staged
+      const exists = prev.find((e) => e.riskId === edit.riskId);
+      if (exists) return prev.map((e) => (e.riskId === edit.riskId ? edit : e));
+      return [...prev, edit];
+    });
   };
 
   return (
@@ -60,12 +88,17 @@ function App() {
             <h1>Contract Risk Analyzer</h1>
           </div>
           {uploadState.file && (
-            <button
-              onClick={handleReset}
-              className="header-button"
-            >
-              Analyze New Contract
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              {modifiedText && (
+                <span className="modified-badge">✓ Document modified</span>
+              )}
+              <button
+                onClick={handleReset}
+                className="header-button"
+              >
+                Analyze New Contract
+              </button>
+            </div>
           )}
         </div>
       </header>
@@ -132,12 +165,44 @@ function App() {
               )}
 
               {uploadState.analysis && (
-                <AnalysisResults analysis={uploadState.analysis} />
+                <AnalysisResults
+                  analysis={uploadState.analysis}
+                  onStageEdit={handleStageEdit}
+                />
               )}
             </div>
           </div>
         )}
       </main>
+
+      {/* Floating edit toolbar – visible when at least one edit is staged */}
+      {stagedEdits.length > 0 && (
+        <div className="edit-toolbar">
+          <span className="edit-toolbar-count">
+            {stagedEdits.length} fix{stagedEdits.length !== 1 ? 'es' : ''} staged
+          </span>
+          <button
+            className="edit-toolbar-btn"
+            onClick={() => setShowEditModal(true)}
+          >
+            <Edit3 style={{ width: '16px', height: '16px' }} />
+            Review &amp; Apply
+          </button>
+        </div>
+      )}
+
+      {/* Edit Modal */}
+      {showEditModal && (
+        <EditModal
+          originalText={originalText}
+          stagedEdits={stagedEdits}
+          onClose={() => setShowEditModal(false)}
+          onApplySuccess={(text) => {
+            setModifiedText(text);
+            setStagedEdits([]);
+          }}
+        />
+      )}
     </div>
   );
 }

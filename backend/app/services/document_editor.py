@@ -1,6 +1,9 @@
 import io
+import re
 from typing import List
 from docx import Document
+from docx.shared import Pt, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from app.models.edit_schemas import TextModification
 
 class DocumentEditor:
@@ -37,16 +40,53 @@ class DocumentEditor:
 
     def generate_docx(self, text: str) -> io.BytesIO:
         """
-        Converts raw text into a formatted DOCX file stream.
+        Converts raw text into a well-formatted DOCX file stream.
+
+        Formatting rules applied automatically:
+        - All-caps lines (e.g. "AGREEMENT TERMS AND CONDITIONS") → Heading 1
+        - Numbered section lines (e.g. "1. TERM AND RENEWAL: …")  → Heading 2
+        - Blank lines                                              → thin spacer paragraph
+        - Everything else                                          → Normal body paragraph
         """
         doc = Document()
+
+        # Remove default empty paragraph Word always adds
+        for p in doc.paragraphs:
+            p._element.getparent().remove(p._element)
+
         doc.add_heading('Modified Contract', 0)
-        
-        # Split by newlines to preserve paragraphs
-        for paragraph in text.split('\n'):
-            if paragraph.strip():
-                doc.add_paragraph(paragraph)
-                
+
+        # Patterns for auto-detecting heading lines
+        all_caps_re = re.compile(r'^[A-Z][A-Z\s\-&/]{4,}$')
+        numbered_re = re.compile(r'^\d+\.\s+[A-Z]')
+
+        for line in text.split('\n'):
+            stripped = line.strip()
+
+            if stripped == '':
+                # Blank line → small spacer so sections breathe
+                p = doc.add_paragraph()
+                p.paragraph_format.space_before = Pt(2)
+                p.paragraph_format.space_after = Pt(2)
+
+            elif all_caps_re.match(stripped):
+                # Document-level title / major section heading
+                heading = doc.add_heading(stripped, level=1)
+                heading.paragraph_format.space_before = Pt(12)
+                heading.paragraph_format.space_after = Pt(4)
+
+            elif numbered_re.match(stripped):
+                # Numbered clause heading (e.g. "3. INTELLECTUAL PROPERTY: …")
+                heading = doc.add_heading(stripped, level=2)
+                heading.paragraph_format.space_before = Pt(10)
+                heading.paragraph_format.space_after = Pt(2)
+
+            else:
+                # Regular body text
+                p = doc.add_paragraph(stripped)
+                p.paragraph_format.space_before = Pt(0)
+                p.paragraph_format.space_after = Pt(4)
+
         file_stream = io.BytesIO()
         doc.save(file_stream)
         file_stream.seek(0)

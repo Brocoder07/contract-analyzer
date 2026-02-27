@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AnalysisResponse } from '../types';
+import type { AnalysisResponse, ModificationRequest, EditResponse } from '../types';
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -48,6 +48,34 @@ export const contractAnalysisAPI = {
       return response.data;
     } catch (error) {
       throw new Error('Backend health check failed');
+    }
+  },
+
+  applyEdits: async (request: ModificationRequest): Promise<EditResponse> => {
+    try {
+      const response = await api.post<EditResponse>('/api/v1/edit/apply', request);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.detail || error.message;
+        throw new Error(`Edit failed: ${message}`);
+      }
+      throw new Error('Unexpected error while applying edits');
+    }
+  },
+
+  downloadDocx: async (request: ModificationRequest): Promise<Blob> => {
+    try {
+      const response = await api.post('/api/v1/edit/download/docx', request, {
+        responseType: 'blob',
+      });
+      return response.data as Blob;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.detail || error.message;
+        throw new Error(`Download failed: ${message}`);
+      }
+      throw new Error('Unexpected error while downloading document');
     }
   },
 };

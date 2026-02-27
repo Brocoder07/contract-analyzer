@@ -234,3 +234,242 @@
   margin: 0 auto 12px;
   color: #10b981;
 }
+
+/* ADD THESE TO THE EXISTING CSS FILE */
+
+.suggestion-stats-card {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 2px solid #f59e0b;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.suggestion-stats-card h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #78350f;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #78350f;
+  text-align: center;
+  font-weight: 500;
+}
+
+.source-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(120, 53, 15, 0.2);
+}
+
+.source-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #78350f;
+}
+
+.source-tag {
+  padding: 4px 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  font-size: 12px;
+  color: #92400e;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+/* Stage-edit button on each RiskCard */
+.stage-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 7px 14px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.stage-edit-btn:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.15);
+}
+
+.stage-edit-btn-icon {
+  width: 14px;
+  height: 14px;
+}
+.summary-metadata-card {
+  background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+  border: 2px solid #8b5cf6;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.summary-metadata-card h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #5b21b6;
+}
+
+.metadata-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.metadata-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  border: 1px solid #c4b5fd;
+}
+
+.metadata-stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #6d28d9;
+  margin-bottom: 4px;
+}
+
+.metadata-stat-label {
+  font-size: 12px;
+  color: #5b21b6;
+  text-align: center;
+  font-weight: 500;
+}
+
+.models-used-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(91, 33, 182, 0.2);
+}
+
+.models-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b21b6;
+}
+
+.model-tag {
+  padding: 5px 12px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  font-size: 12px;
+  color: #6d28d9;
+  font-weight: 500;
+  text-transform: capitalize;
+  border: 1px solid #c4b5fd;
+}
+
+/* Existing suggestion stats card - keep as is */
+.suggestion-stats-card {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 2px solid #f59e0b;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.suggestion-stats-card h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #78350f;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #78350f;
+  text-align: center;
+  font-weight: 500;
+}
+
+.source-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(120, 53, 15, 0.2);
+}
+
+.source-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #78350f;
+}
+
+.source-tag {
+  padding: 4px 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  font-size: 12px;
+  color: #92400e;
+  font-weight: 500;
+  text-transform: capitalize;
+}

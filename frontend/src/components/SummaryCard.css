@@ -1,0 +1,241 @@
+.summary-card {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 2px solid #22c55e;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.summary-title-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.summary-icon {
+  color: #16a34a;
+}
+
+.summary-title-section h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #14532d;
+}
+
+.summary-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.contract-type-badge {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-color: #fef3c7;
+  color: #92400e;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.confidence-badge {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.source-badge {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: #ffffff;
+  color: #059669;
+  border: 1px solid #6ee7b7;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.compression-badge {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 500;
+  background-color: #e0e7ff;
+  color: #4338ca;
+}
+
+.summary-content {
+  margin-bottom: 20px;
+}
+
+.summary-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #166534;
+  margin: 0;
+  padding: 16px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  border-left: 4px solid #22c55e;
+}
+
+.summary-stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #065f46;
+}
+
+.stat-label {
+  font-weight: 600;
+}
+
+.stat-value {
+  font-weight: 500;
+  color: #047857;
+}
+
+.expand-details-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #ffffff;
+  border: 1px solid #86efac;
+  border-radius: 10px;
+  color: #059669;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  margin-top: 12px;
+}
+
+.expand-details-button:hover {
+  background-color: #f0fdf4;
+  border-color: #22c55e;
+  transform: translateY(-1px);
+}
+
+.summary-details {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.detail-section {
+  background-color: #ffffff;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.detail-section h4 {
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #14532d;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-list {
+  margin: 0;
+  padding-left: 24px;
+  list-style-type: disc;
+}
+
+.detail-list li {
+  font-size: 14px;
+  color: #166534;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.parties-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.party-item {
+  padding: 8px 12px;
+  background-color: #f0fdf4;
+  border-left: 3px solid #22c55e;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.dates-list {
+  list-style-type: none;
+  padding-left: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+.date-item {
+  padding: 8px 12px;
+  background-color: #fef3c7;
+  border-left: 3px solid #f59e0b;
+  border-radius: 6px;
+  font-weight: 500;
+  color: #92400e;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .summary-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .summary-badges {
+    width: 100%;
+  }
+
+  .summary-stats-bar {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .dates-list {
+    grid-template-columns: 1fr;
+  }
+}

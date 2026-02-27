@@ -91,6 +91,7 @@ Thumbs.db
 
 # If you intentionally version minimal model metadata, whitelist needed files below
 # Example (already committed):
+backend/app/data/models
 !backend/app/data/models/bert_contracts/config.json
 !backend/app/data/models/bert_contracts/tokenizer_config.json
 !backend/app/data/models/bert_contracts/tokenizer.json

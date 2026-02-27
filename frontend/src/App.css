@@ -47,6 +47,17 @@
   background-color: #f9fafb;
 }
 
+/* Modified-document badge in header */
+.modified-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #065f46;
+  background: #d1fae5;
+  border: 1px solid #6ee7b7;
+  border-radius: 999px;
+  padding: 3px 12px;
+}
+
 /* Main content */
 .main-content {
   max-width: 1280px;
@@ -165,4 +176,58 @@
 
 .retry-button:hover {
   background-color: #b91c1c;
+}
+
+/* Floating edit toolbar */
+.edit-toolbar {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #1e3a8a;
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px 18px;
+  box-shadow: 0 8px 24px rgba(30, 58, 138, 0.4);
+  z-index: 40;
+  animation: toolbar-slide-in 0.25s ease;
+}
+
+@keyframes toolbar-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.edit-toolbar-count {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.edit-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.edit-toolbar-btn:hover {
+  background: #1d4ed8;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.5);
 }
