@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.api.v1.endpoints import edit
 from app.core.config import settings
 from app.api.v1.endpoints import analysis, health
 
@@ -22,6 +22,7 @@ app.add_middleware(
 # Include routers
 app.include_router(health.router, prefix=settings.API_V1_STR, tags=["health"])
 app.include_router(analysis.router, prefix=settings.API_V1_STR, tags=["analysis"])
+app.include_router(edit.router, prefix="/api/v1/edit", tags=["editing"])
 
 @app.options("/{path:path}")
 async def options_handler(path: str):
