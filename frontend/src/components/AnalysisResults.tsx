@@ -9,6 +9,7 @@ interface AnalysisResultsProps {
   analysis: AnalysisResponse;
   className?: string;
   onStageEdit?: (edit: StagedEdit) => void;
+  originalText?: string;
 }
 
 const DETECTOR_LABELS: Record<string, string> = {
@@ -59,7 +60,7 @@ const formatRiskType = (type: RiskType): string => {
   return type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 };
 
-const RiskCard: React.FC<{ risk: RiskItem; onStageEdit?: (edit: StagedEdit) => void }> = ({ risk, onStageEdit }) => {
+const RiskCard: React.FC<{ risk: RiskItem; onStageEdit?: (edit: StagedEdit) => void; originalText?: string }> = ({ risk, onStageEdit, originalText }) => {
   const colorClass = getRiskLevelColor(risk.risk_level);
   const icon = getRiskLevelIcon(risk.risk_level);
 
@@ -72,14 +73,16 @@ const RiskCard: React.FC<{ risk: RiskItem; onStageEdit?: (edit: StagedEdit) => v
 
   const handleStage = () => {
     if (!canStage || risk.start_pos === undefined || risk.end_pos === undefined) return;
-    // Normalise extracted text: PDF extraction often inserts newlines between words.
-    // Collapse any run of whitespace (including \n) down to a single space.
-    const normalise = (s: string) => s.replace(/\s+/g, ' ').trim();
+    // Use the exact raw slice from originalText so start_pos/end_pos stay in sync
+    // with what the backend will replace. Fall back to risk.text if unavailable.
+    const rawOriginal = originalText
+      ? originalText.slice(risk.start_pos, risk.end_pos)
+      : risk.text;
     onStageEdit({
       riskId: risk.id,
       riskType: formatRiskType(risk.risk_type),
-      original: normalise(risk.text),
-      replacement: normalise(bestSuggestion!.suggestion_text),
+      original: rawOriginal,
+      replacement: bestSuggestion!.suggestion_text,
       start_pos: risk.start_pos,
       end_pos: risk.end_pos,
       comment: bestSuggestion!.rationale,
@@ -143,7 +146,7 @@ const RiskCard: React.FC<{ risk: RiskItem; onStageEdit?: (edit: StagedEdit) => v
   );
 };
 
-export const AnalysisResults: React.FC<AnalysisResultsProps> = ({ analysis, className = '', onStageEdit }) => {
+export const AnalysisResults: React.FC<AnalysisResultsProps> = ({ analysis, className = '', onStageEdit, originalText }) => {
   const overallColorClass = getRiskLevelColor(analysis.risk_level);
   const overallIcon = getRiskLevelIcon(analysis.risk_level);
 
@@ -295,7 +298,7 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({ analysis, clas
           </h3>
           <div className="risks-list">
             {analysis.risks.map((risk, index) => (
-              <RiskCard key={index} risk={risk} onStageEdit={onStageEdit} />
+              <RiskCard key={index} risk={risk} onStageEdit={onStageEdit} originalText={originalText} />
             ))}
           </div>
         </div>

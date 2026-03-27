@@ -152,10 +152,13 @@ export const EditModal: React.FC<EditModalProps> = ({
               </div>
 
               <div className="edit-row-columns">
-                {/* Original */}
+                {/* Original — display-normalise for readability; the raw bytes
+                    are sent via start_pos/end_pos, not this string */}
                 <div className="edit-col">
                   <label className="edit-col-label">Original text</label>
-                  <div className="edit-col-original">{edit.original}</div>
+                  <div className="edit-col-original">
+                    {edit.original.replace(/\s+/g, ' ').trim()}
+                  </div>
                 </div>
 
                 {/* Replacement (editable) */}

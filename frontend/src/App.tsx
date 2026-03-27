@@ -168,6 +168,7 @@ function App() {
                 <AnalysisResults
                   analysis={uploadState.analysis}
                   onStageEdit={handleStageEdit}
+                  originalText={originalText}
                 />
               )}
             </div>
