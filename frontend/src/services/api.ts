@@ -1,5 +1,15 @@
 import axios from 'axios';
-import type { AnalysisResponse, ModificationRequest, EditResponse } from '../types';
+import type {
+  AnalysisResponse,
+  ModificationRequest,
+  EditResponse,
+  RegisterRequest,
+  RegisterResponse,
+  LoginRequest,
+  TokenResponse,
+  AuthUser,
+  OutputLanguage,
+} from '../types';
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -8,13 +18,38 @@ const api = axios.create({
   timeout: 0, // No timeout - let requests complete
 });
 
+export const AUTH_TOKEN_STORAGE_KEY = 'contract_analyzer_auth_token';
+
+export const setAuthToken = (token: string | null) => {
+  if (token) {
+    localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token);
+  } else {
+    localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
+  }
+};
+
+export const getAuthToken = (): string | null => {
+  return localStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
+};
+
+api.interceptors.request.use((config) => {
+  const token = getAuthToken();
+  if (token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export const contractAnalysisAPI = {
-  analyzeContract: async (file: File): Promise<AnalysisResponse> => {
+  analyzeContract: async (file: File, outputLanguage: OutputLanguage = 'en'): Promise<AnalysisResponse> => {
     const formData = new FormData();
     formData.append('file', file);
 
     try {
-      const response = await api.post<AnalysisResponse>('/api/v1/analyze', formData);
+      const response = await api.post<AnalysisResponse>('/api/v1/analyze', formData, {
+        params: { output_language: outputLanguage },
+      });
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -25,9 +60,10 @@ export const contractAnalysisAPI = {
     }
   },
 
-  analyzeText: async (text: string): Promise<AnalysisResponse> => {
+  analyzeText: async (text: string, outputLanguage: OutputLanguage = 'en'): Promise<AnalysisResponse> => {
     try {
       const response = await api.post<AnalysisResponse>('/api/v1/analyze-text', text, {
+        params: { output_language: outputLanguage },
         headers: {
           'Content-Type': 'text/plain',
         },
@@ -76,6 +112,45 @@ export const contractAnalysisAPI = {
         throw new Error(`Download failed: ${message}`);
       }
       throw new Error('Unexpected error while downloading document');
+    }
+  },
+
+  register: async (payload: RegisterRequest): Promise<RegisterResponse> => {
+    try {
+      const response = await api.post<RegisterResponse>('/api/v1/auth/register', payload);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.detail || error.message;
+        throw new Error(`Registration failed: ${message}`);
+      }
+      throw new Error('Unexpected error during registration');
+    }
+  },
+
+  login: async (payload: LoginRequest): Promise<TokenResponse> => {
+    try {
+      const response = await api.post<TokenResponse>('/api/v1/auth/login', payload);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.detail || error.message;
+        throw new Error(`Login failed: ${message}`);
+      }
+      throw new Error('Unexpected error during login');
+    }
+  },
+
+  me: async (): Promise<AuthUser> => {
+    try {
+      const response = await api.get<AuthUser>('/api/v1/auth/me');
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.detail || error.message;
+        throw new Error(`Session check failed: ${message}`);
+      }
+      throw new Error('Unexpected error while checking session');
     }
   },
 };

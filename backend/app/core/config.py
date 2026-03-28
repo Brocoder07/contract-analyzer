@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     # Risk analysis Model paths and configuration
     ML_MODEL_PATH: str = "./app/data/models/bert_contracts"
     RULE_CONFIG_PATH: str = "./app/services/ai/rules.json"
+    TRANSLATION_MODEL_PATH: str = "./app/data/models/en_hi_translate/en-hi-final"
 
     # Custom trained multi-task model (MiniLM + CUAD 15 categories)
     CUSTOM_MODEL_PATH: str = "./app/data/models/custom_analysis_model"
@@ -50,6 +51,8 @@ class Settings(BaseSettings):
     # Model performance settings
     ML_CONFIDENCE_THRESHOLD: float = 0.6
     ML_BATCH_SIZE: int = 16
+    TRANSLATION_MAX_INPUT_LENGTH: int = 256
+    TRANSLATION_MAX_OUTPUT_LENGTH: int = 256
     
     # Suggestion Model settings
     SUGGESTION_MODEL_TYPE: SuggestionModelType = SuggestionModelType.T5
@@ -106,6 +109,11 @@ class Settings(BaseSettings):
 
     # Redis
     REDIS_URL: str = "redis://localhost:6379"
+
+    # MongoDB (auth)
+    MONGODB_URI: str = "mongodb://localhost:27017"
+    MONGODB_DB_NAME: str = "contract_analyzer"
+    MONGODB_USERS_COLLECTION: str = "users"
     
     # File upload
     MAX_FILE_SIZE: int = 10 * 1024 * 1024  # 10MB

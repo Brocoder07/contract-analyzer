@@ -70,6 +70,25 @@
   text-align: center;
 }
 
+.auth-locked-state {
+  text-align: center;
+  background: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 28px 18px;
+}
+
+.auth-locked-state h3 {
+  margin: 0 0 8px;
+  color: #0f172a;
+  font-size: 20px;
+}
+
+.auth-locked-state p {
+  margin: 0;
+  color: #64748b;
+}
+
 .upload-hero {
   margin-bottom: 32px;
 }
@@ -86,6 +105,32 @@
   color: #6b7280;
   max-width: 512px;
   margin: 0 auto;
+}
+
+.output-language-control {
+  margin: 18px auto 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #dbe3f0;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+.output-language-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.output-language-select {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 14px;
+  color: #0f172a;
+  background: #fff;
 }
 
 /* Analysis layout */

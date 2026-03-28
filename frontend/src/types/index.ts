@@ -7,6 +7,8 @@ export const RiskLevel = {
 
 export type RiskLevel = typeof RiskLevel[keyof typeof RiskLevel];
 
+export type OutputLanguage = 'en' | 'hi';
+
 export const RiskType = {
   AUTO_RENEWAL: "auto_renewal",
   LIABILITY_LIMITATION: "liability_limitation",
@@ -119,6 +121,7 @@ export interface AnalysisResponse {
     sentences_count: number;
   };
   extracted_text?: string;  // Raw text returned by backend for position-based editing
+  output_language?: OutputLanguage;
 }
 
 export interface UploadState {
@@ -157,4 +160,36 @@ export interface StagedEdit {
   start_pos: number;
   end_pos: number;
   comment?: string;
+}
+
+// ── Authentication ───────────────────────────────────────────────────────────
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  full_name: string;
+  created_at: string;
+}
+
+export interface RegisterRequest {
+  email: string;
+  full_name: string;
+  password: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface TokenResponse {
+  access_token: string;
+  token_type: 'bearer';
+  expires_in: number;
+  user: AuthUser;
+}
+
+export interface RegisterResponse {
+  message: string;
+  user?: AuthUser;
 }

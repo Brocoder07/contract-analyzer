@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FileUpload } from './components/FileUpload';
 import { PDFViewer } from './components/PDFViewer';
 import { AnalysisResults } from './components/AnalysisResults';
 import { EditModal } from './components/EditModal';
-import { contractAnalysisAPI } from './services/api';
-import type { UploadState, StagedEdit } from './types';
+import { AuthPanel } from './components/AuthPanel';
+import { contractAnalysisAPI, getAuthToken, setAuthToken } from './services/api';
+import type { UploadState, StagedEdit, AuthUser, OutputLanguage } from './types';
 import { FileText, BarChart3, Edit3 } from 'lucide-react';
 import './App.css';
 
@@ -21,6 +22,34 @@ function App() {
   const [stagedEdits, setStagedEdits] = useState<StagedEdit[]>([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [modifiedText, setModifiedText] = useState<string | null>(null);
+  const [outputLanguage, setOutputLanguage] = useState<OutputLanguage>('en');
+
+  // Auth state (simple SPA gating)
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
+
+  useEffect(() => {
+    const initSession = async () => {
+      const token = getAuthToken();
+      if (!token) {
+        setIsCheckingSession(false);
+        return;
+      }
+
+      try {
+        const me = await contractAnalysisAPI.me();
+        setAuthUser(me);
+      } catch {
+        // stale token or backend unavailable for auth -> clear session
+        setAuthToken(null);
+        setAuthUser(null);
+      } finally {
+        setIsCheckingSession(false);
+      }
+    };
+
+    void initSession();
+  }, []);
 
   // Reset all editing state when a new file is selected
   const handleFileSelect = async (file: File) => {
@@ -37,7 +66,7 @@ function App() {
     setOriginalText('');
 
     try {
-      const analysis = await contractAnalysisAPI.analyzeContract(file);
+      const analysis = await contractAnalysisAPI.analyzeContract(file, outputLanguage);
       // Use the server-extracted text (works for PDF, DOCX, and TXT)
       setOriginalText(analysis.extracted_text ?? '');
       setUploadState({
@@ -78,6 +107,17 @@ function App() {
     });
   };
 
+  const handleLoginSuccess = (token: string, user: AuthUser) => {
+    setAuthToken(token);
+    setAuthUser(user);
+  };
+
+  const handleLogout = () => {
+    setAuthToken(null);
+    setAuthUser(null);
+    handleReset();
+  };
+
   return (
     <div className="app-container">
       {/* Header */}
@@ -104,7 +144,20 @@ function App() {
       </header>
 
       <main className="main-content">
-        {!uploadState.file ? (
+        <AuthPanel
+          user={authUser}
+          loadingSession={isCheckingSession}
+          onLoginSuccess={handleLoginSuccess}
+          onLogout={handleLogout}
+        />
+
+        {!authUser ? (
+          <div className="auth-locked-state">
+            <h3>Please sign in to analyze contracts</h3>
+            <p>Login or register above to continue.</p>
+          </div>
+        ) : (
+        !uploadState.file ? (
           /* Upload State */
           <div className="upload-section">
             <div className="upload-hero">
@@ -114,6 +167,22 @@ function App() {
                 Upload your PDF contract and get instant risk assessment with detailed insights
                 and recommendations from our advanced AI system.
               </p>
+
+              <div className="output-language-control">
+                <label htmlFor="output-language" className="output-language-label">
+                  Output language
+                </label>
+                <select
+                  id="output-language"
+                  className="output-language-select"
+                  value={outputLanguage}
+                  onChange={(e) => setOutputLanguage(e.target.value as OutputLanguage)}
+                  disabled={uploadState.isUploading}
+                >
+                  <option value="en">English</option>
+                  <option value="hi">Hindi (हिन्दी)</option>
+                </select>
+              </div>
             </div>
             
             <FileUpload
@@ -173,6 +242,7 @@ function App() {
               )}
             </div>
           </div>
+        )
         )}
       </main>
 

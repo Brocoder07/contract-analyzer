@@ -10,6 +10,11 @@ class RiskLevel(str, Enum):
     LOW = "low"
     NONE = "none"
 
+
+class OutputLanguage(str, Enum):
+    ENGLISH = "en"
+    HINDI = "hi"
+
 class RiskType(str, Enum):
     # Original categories
     AUTO_RENEWAL = "auto_renewal"
@@ -86,6 +91,7 @@ class AnalysisResponse(BaseModel):
     summary_metadata: Optional[SummaryMetadata] = None 
     document_metadata: Dict[str, Any] = Field(default_factory=dict)
     extracted_text: Optional[str] = Field(None, description="Raw extracted text for client-side editing")
+    output_language: OutputLanguage = Field(default=OutputLanguage.ENGLISH)
 
 class HealthResponse(BaseModel):
     status: str

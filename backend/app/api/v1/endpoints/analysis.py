@@ -8,8 +8,9 @@ from typing import Optional
 
 from app.services.document_processor import DocumentProcessor
 from app.services.ai.risk_analyzer import HybridRiskAnalyzer
+from app.services.ai.output_translator import OutputTranslator, TranslatorConfig
 from app.core.config import settings
-from app.models.schemas import AnalysisResponse, RiskItem
+from app.models.schemas import AnalysisResponse, RiskItem, OutputLanguage
 
 router = APIRouter()
 
@@ -22,6 +23,13 @@ analyzer = HybridRiskAnalyzer(
 )
 
 doc_processor = DocumentProcessor()
+translator = OutputTranslator(
+    TranslatorConfig(
+        model_path=settings.TRANSLATION_MODEL_PATH,
+        max_input_length=settings.TRANSLATION_MAX_INPUT_LENGTH,
+        max_output_length=settings.TRANSLATION_MAX_OUTPUT_LENGTH,
+    )
+)
 
 
 @router.post("/analyze", response_model=AnalysisResponse)
@@ -34,7 +42,11 @@ async def analyze_contract(
     generate_summary: bool = Query(
         True,
         description="Generate contract summary"
-    )
+    ),
+    output_language: OutputLanguage = Query(
+        OutputLanguage.ENGLISH,
+        description="Output language for model-generated content (en|hi)",
+    ),
 ):
     """
     Analyze uploaded contract document for risks
@@ -84,6 +96,12 @@ async def analyze_contract(
         # Add suggestion statistics if suggestions were generated
         if generate_suggestions and result.get("risks"):
             result["suggestion_stats"] = analyzer.get_suggestion_stats(result["risks"])
+
+        # Translate model outputs on request
+        if output_language == OutputLanguage.HINDI:
+            result = translator.translate_analysis_result(result)
+        else:
+            result["output_language"] = OutputLanguage.ENGLISH
         
         # Attach extracted text so the frontend can use it for position-based editing
         result["extracted_text"] = text
@@ -106,7 +124,11 @@ async def analyze_text(
     generate_summary: bool = Query(
         True,
         description="Generate contract summary"
-    )
+    ),
+    output_language: OutputLanguage = Query(
+        OutputLanguage.ENGLISH,
+        description="Output language for model-generated content (en|hi)",
+    ),
 ):
     """
     Analyze plain text contract for risks
@@ -131,6 +153,12 @@ async def analyze_text(
         # Add suggestion statistics if suggestions were generated
         if generate_suggestions and result.get("risks"):
             result["suggestion_stats"] = analyzer.get_suggestion_stats(result["risks"])
+
+        # Translate model outputs on request
+        if output_language == OutputLanguage.HINDI:
+            result = translator.translate_analysis_result(result)
+        else:
+            result["output_language"] = OutputLanguage.ENGLISH
         
         return AnalysisResponse(**result)
         
